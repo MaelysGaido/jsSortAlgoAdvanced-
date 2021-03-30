@@ -135,24 +135,107 @@ function sort(type) {
     }
 }
 
-function insertsort() {
-    console.log("insertsort - implement me !");
+function insertsort(T) {
+    function tri_insertion (T) {
+        let n = T.length;
+        for (let i=1; i < n; i++) {
+            let temp = T[i].distanceFromGrenoble;
+            let j = i-1;
+            while (j >= 0 && T[j].distanceFromGrenoble > temp) {
+               
+                T[j+1].distanceFromGrenoble = T[j].distanceFromGrenoble;
+                j = j - 1;
+            }
+            T[j+1].distanceFromGrenoble = temp;    
+    }
+    }
+    tri_insertion(T)
 }
 
-function selectionsort() {
-    console.log("selectionsort - implement me !");
+function selectionsort(T) {
+    function tri_selection(T){
+        let n = T.length;
+        for (let i=0; i < n; i++) {
+            let min = i;
+            for (let j=i+1; j < n; j++) {
+                if(T[j].distanceFromGrenoble < T[min].distanceFromGrenoble) {
+                    min=j;
+                }
+            }
+            swap(T, i, min);
+        }
+    }
+    
+    tri_selection(T);
 }
 
-function bubblesort() {
-    console.log("bubblesort - implement me !");
+function bubblesort(tab) {
+    function sort(tab) {
+        let changed = true;
+    
+        while (changed) {
+            changed = false;
+            for (let i = 0; i < tab.length - 1; i++) {
+    
+                if (tab[i].distanceFromGrenoble > tab[i + 1].distanceFromGrenoble) {
+                    swap(tab, tab[i], tab[i+1]);
+                    changed = true;
+                }
+            }
+        }
+    }
+    
+    sort(tab);
 }
 
 function shellsort() {
     console.log("shellsort - implement me !");
 }
 
-function mergesort() {
-    console.log("mergesort - implement me !");
+function mergesort(T) {
+    function tri_fusion(T) {
+        let n = T.length;
+        if (n <= 1) {
+            return T;
+        }
+        else {
+            // coupe les tableaux en deux (après avoir déterminé le médian)
+            let middle = Math.floor(n / 2);
+            let leftT = T.slice(0, middle);
+            let rightT = T.slice(middle, n);
+            // continue de couper de façon récursive
+            return fusion(
+                tri_fusion(leftT),
+                tri_fusion(rightT)
+            );
+        };
+    }
+    
+    // fonction récursive qui lie les tableaux pré-triés. 
+    
+    function fusion(left, right) {
+      
+       
+        // vérifie si les deux sous-tableaux sont vides
+            // cas si left est vide
+            if(left.length === 0) {
+                return right;
+            }
+            // cas si right est vide
+            else if(right.length === 0) {
+                return left;
+            }
+            // trouve valeur min
+            else if(left[0].distanceFromGrenoble <= right[0].distanceFromGrenoble) {
+            //concatène en les plaçant du bon côté
+                        return [left[0].distanceFromGrenoble].concat(fusion(left.slice(1, left.length), right));
+                }else {
+                    return [right[0]].distanceFromGrenoble.concat(fusion(left, right.slice(1, right.length)));
+        }
+       
+    }
+    
+    tri_fusion(T);
 }
 
 
