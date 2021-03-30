@@ -61,8 +61,26 @@ function getArrayCsv(csv) {
  * @returns la distance qui sépare la ville de Grenoble
  */
 function distanceFromGrenoble(ville) {
-    console.log('implement me !');
-    return 0;
+    // latitude et longitude de Grenoble
+    const lat1 = 45.188529;
+    const lon1 = 5.724524;
+    const lat2 = ville.latitude;
+    const lon2 = ville.longitude;
+
+    const R = 6371e3; // metres
+    const φ1 = lat1 * Math.PI/180; // φ, λ in radians
+    const φ2 = lat2 * Math.PI/180;
+    const Δφ = (lat2-lat1) * Math.PI/180;
+    const Δλ = (lon2-lon1) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c; // in metres
+ 
+    return d;
 }
 
 /**
@@ -73,8 +91,11 @@ function distanceFromGrenoble(ville) {
  * @return vrai si la ville i est plus proche
  */
 function isLess(i, j) {
-    console.log('implement me !');
-    return true;
+    if (i.distanceFromGrenoble < j.distanceFromGrenoble) {
+        return true;
+    }
+   
+    
 }
 
 /**
@@ -82,32 +103,34 @@ function isLess(i, j) {
  * @param {*} i 
  * @param {*} j 
  */
-function swap(i, j) {
-    console.log('implement me !');
+ function swap(tab, i, j) {
+    [tab[i], tab[j]] = [tab[j], tab[i]];
+    nbPermutation++;
 }
+
 
 function sort(type) {
     switch (type) {
         case 'insert':
-            insertsort();
+            insertsort(listVille);
             break;
         case 'select':
-            selectionsort();
+            selectionsort(listVille);
             break;
         case 'bubble':
-            bubblesort();
+            bubblesort(listVille);
             break;
         case 'shell':
-            shellsort();
+            shellsort(listVille);
             break;
         case 'merge':
-            mergesort();
+            mergesort(listVille);
             break;
         case 'heap':
-            heapsort();
+            heapsort(listVille);
             break;
         case 'quick':
-            quicksort();
+            quicksort(listVille);
             break;
     }
 }
@@ -137,8 +160,32 @@ function heapsort() {
     console.log("heapsort - implement me !");
 }
 
-function quicksort() {
-    console.log("quicksort - implement me !");
+function quicksort(tab) {
+    function triRapide (tab, first, last) {
+        let pivot;
+        if(first < last){
+    // choisit le dernier comme pivot
+            pivot =  last;
+            pivot = part(tab, first , last, pivot);
+            triRapide(tab,first, pivot -1);
+            triRapide(tab, pivot + 1, last);
+        }
+        return tab;
+    }
+    
+    function part(tab, first, last, pivot){
+        swap(tab, pivot, last);
+        let j=first;
+            for (i = first; i < last; i++) {
+                if(tab[i].distanceFromGrenoble <= tab[last].distanceFromGrenoble) {
+                    swap(tab, i, j);
+                    j = j+1;
+                }
+            }
+        swap(tab, last,j);
+        return j;
+    }
+    triRapide(tab, 0, tab.length -1);
 }
 
 /** MODEL */
